@@ -1,1 +1,1 @@
-# GTest Analizer
+# GTest Analyzer
