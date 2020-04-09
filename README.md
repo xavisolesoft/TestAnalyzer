@@ -1,1 +1,1 @@
-# TestRunner
+# GTest Analizer
