@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 	createFileMenu();
 	createSettingsMenu();
+
+	initImportButton();
+	initCleanButton();
 }
 
 MainWindow::~MainWindow()
@@ -29,27 +32,7 @@ QMenu *MainWindow::createFileMenu()
 	QMenu* fileMenu = ui->menubar->addMenu(tr("File"));
 	fileMenu->addAction(tr("Import"),
 						[this](){
-							QStringList filePaths = QFileDialog::getOpenFileNames(this);
-							auto allTestModels = std::make_shared<TestModel>();
-							foreach(const QString& filePath, filePaths){
-								QFile qTestOutputFile(filePath);
-								GTestParser gTestParser;
-								auto testModel = gTestParser.parseTestModel(qTestOutputFile);
-								allTestModels->merge(testModel);
-							}
-
-							ui->testTableView->setTestModel(allTestModels);
-
-							ui->runTestsLabel->setText(tr("Run: %1")
-													   .arg(allTestModels->getNumTests()));
-							ui->okTestsLabel->setText(tr("OK: %1")
-													   .arg(allTestModels->getNumTests(TestStatus::SUCCEED)));
-							ui->failedTestsLabel->setText(tr("FAILED: %1")
-													   .arg(allTestModels->getNumTests(TestStatus::FALIED)));
-							ui->timeoutTestsLabel->setText(tr("TIMEOUT: %1")
-														   .arg(allTestModels->getNumTests(TestStatus::TIMEOUT)));
-							ui->crashedTestsLabel->setText(tr("CRASHED: %1")
-													   .arg(allTestModels->getNumTests(TestStatus::CRASHED)));
+							import();
 						},
 						QKeySequence("Ctrl+I"));
 
@@ -70,4 +53,55 @@ QMenu *MainWindow::createSettingsMenu()
 							});
 
 	return settingsMenu;
+}
+
+void MainWindow::initImportButton()
+{
+	connect(ui->importButton,
+			&QAbstractButton::clicked,
+			[this](){
+				import();
+	});
+}
+
+void MainWindow::initCleanButton()
+{
+	connect(ui->cleanButton,
+			&QAbstractButton::clicked,
+			[this](){
+				setTestModel(std::make_shared<TestModel>());
+	});
+}
+
+void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)
+{
+	ui->testTableView->setTestModel(testModel);
+
+	ui->runTestsLabel->setText(tr("Run: %1")
+							   .arg(testModel->getNumTests()));
+	ui->okTestsLabel->setText(tr("OK: %1")
+							   .arg(testModel->getNumTests(TestStatus::SUCCEED)));
+	ui->failedTestsLabel->setText(tr("FAILED: %1")
+							   .arg(testModel->getNumTests(TestStatus::FALIED)));
+	ui->timeoutTestsLabel->setText(tr("TIMEOUT: %1")
+								   .arg(testModel->getNumTests(TestStatus::TIMEOUT)));
+	ui->crashedTestsLabel->setText(tr("CRASHED: %1")
+							   .arg(testModel->getNumTests(TestStatus::CRASHED)));
+}
+
+void MainWindow::import()
+{
+	if(QStringList filePaths = QFileDialog::getOpenFileNames(this); !filePaths.empty()){
+		auto allTestModels = std::make_shared<TestModel>();
+		foreach(const QString& filePath, filePaths){
+			QFile qTestOutputFile(filePath);
+			GTestParser gTestParser;
+			auto testModel = gTestParser.parseTestModel(qTestOutputFile);
+			allTestModels->merge(testModel);
+		}
+
+		allTestModels->merge(mTestModel);
+		mTestModel = allTestModels;
+		setTestModel(allTestModels);
+	}
 }

@@ -36,7 +36,9 @@ int TestModel::getNumTests(TestStatus testStatus) const
 
 void TestModel::merge(std::shared_ptr<TestModel> theirs)
 {
-	for(int i = 0; i < theirs->getNumTests(); ++i){
-		mTestEntries.push_back(theirs->getTest(i));
+	if(theirs){
+		for(int i = 0; i < theirs->getNumTests(); ++i){
+			mTestEntries.push_back(theirs->getTest(i));
+		}
 	}
 }

@@ -3,6 +3,8 @@
 #include <QMenu>
 #include <QMainWindow>
 
+class TestModel;
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -19,5 +21,13 @@ private:
 	QMenu* createFileMenu();
 	QMenu* createSettingsMenu();
 
+	void initImportButton();
+	void initCleanButton();
+
+	void setTestModel(std::shared_ptr<TestModel> testModel);
+
+	void import();
+
     Ui::MainWindow *ui;
+	std::shared_ptr<TestModel> mTestModel;
 };
