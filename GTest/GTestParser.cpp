@@ -43,6 +43,7 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 				lastTestEntry->setOutputFilePath(gTestOutputFile->fileName());
 			}
 			lastTestEntry->setLineNumber(lineNumber);
+			lastTestEntry->setStatus(TestStatus::RUNNING);
 			lastTag = GTestTag::RUN;
 		}
 		else if(line.startsWith("[       OK ]"))
@@ -73,6 +74,10 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 			}
 		}
 		lineNumber++;
+	}
+
+	if(lastTag == GTestTag::RUN){
+		lastTestEntry->setStatus(TestStatus::CRASHED);
 	}
 
 	return testModel;
