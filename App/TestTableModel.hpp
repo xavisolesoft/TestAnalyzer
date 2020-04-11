@@ -14,7 +14,7 @@ class TestTableModel : public QAbstractTableModel
 	Q_OBJECT
 
 public:
-	explicit TestTableModel(QObject *parent, std::shared_ptr<TestModel> testModel);
+	explicit TestTableModel(QObject *parent, std::shared_ptr<TestModel> mTestModel);
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent) const override;
@@ -28,7 +28,7 @@ private:
 	//TODO: Move this function to TestStatus.hpp if finaly is not removed.
 	static QString TestStatusToString(TestStatus testStatus);
 
-	std::shared_ptr<TestModel> testModel;
+	std::shared_ptr<TestModel> mTestModel;
 
 	static constexpr int TEST_STATUS_SECTION = 0;
 	static constexpr int TEST_FAMILY_SECTION = 1;

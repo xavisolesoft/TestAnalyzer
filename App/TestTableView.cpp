@@ -21,10 +21,10 @@ TestTableView::TestTableView(QWidget* parent) :
 {
 
 }
-#include <QDebug>
+
 void TestTableView::setTestModel(std::shared_ptr<TestModel> testModel)
 {
-	testTableModel = new TestTableModel(this, testModel);
+	auto testTableModel = new TestTableModel(this, testModel);
 	auto sortFilterProxyModel = new QSortFilterProxyModel(this);
 	sortFilterProxyModel->setDynamicSortFilter(true);
 	sortFilterProxyModel->setSourceModel(testTableModel);
@@ -36,7 +36,7 @@ void TestTableView::setTestModel(std::shared_ptr<TestModel> testModel)
 
 	connect(this,
 			&QTableView::clicked,
-			[this](const QModelIndex& modelIndex){
+			[this, testTableModel](const QModelIndex& modelIndex){
 				QModelIndex mappedIndex = static_cast<QSortFilterProxyModel*>(model())->mapToSource(modelIndex);
 				if(mappedIndex.column() == 3){
 					if(const TestEntry* testEntry = testTableModel->getRowTestEntry(mappedIndex.row()); testEntry){
@@ -75,5 +75,5 @@ void TestTableView::keyPressEvent(QKeyEvent *event)
 			}
 
 			QApplication::clipboard()->setText(text);
-		}
+	}
 }

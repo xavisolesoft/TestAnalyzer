@@ -7,60 +7,60 @@ TestEntry::TestEntry()
 
 const QString& TestEntry::getName() const
 {
-	return name;
+	return mName;
 }
 
 void TestEntry::setName(QString value)
 {
-	name = std::move(value);
+	mName = std::move(value);
 }
 
 const QString& TestEntry::getFamily() const
 {
-	return family;
+	return mFamily;
 }
 
 void TestEntry::setFamily(QString value)
 {
-	family = std::move(value);
+	mFamily = std::move(value);
 }
 
 const QString& TestEntry::getDump() const
 {
-	return dump;
+	return mDump;
 }
 
 void TestEntry::setDump(QString value)
 {
-	dump = std::move(value);
+	mDump = std::move(value);
 }
 
 TestStatus TestEntry::getStatus() const
 {
-	return status;
+	return mStatus;
 }
 
 void TestEntry::setStatus(TestStatus value)
 {
-	status = value;
+	mStatus = value;
 }
 
 const QString& TestEntry::getOutputFilePath() const
 {
-	return outputFilePath;
+	return mOutputFilePath;
 }
 
 void TestEntry::setOutputFilePath(QString value)
 {
-	outputFilePath = value;
+	mOutputFilePath = value;
 }
 
 int TestEntry::getLine() const
 {
-    return lineNumber;
+    return mLineNumber;
 }
 
 void TestEntry::setLineNumber(int value)
 {
-    lineNumber = value;
+    mLineNumber = value;
 }

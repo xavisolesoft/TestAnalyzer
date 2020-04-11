@@ -10,25 +10,25 @@ TestModel::TestModel()
 
 TestEntry& TestModel::addTestEntry()
 {
-	testEntries.emplace_back();
-	return testEntries.back();
+	mTestEntries.emplace_back();
+	return mTestEntries.back();
 }
 
 int TestModel::getNumTests() const
 {
-	return static_cast<int>(testEntries.size());
+	return static_cast<int>(mTestEntries.size());
 }
 
 const TestEntry& TestModel::getTest(int index) const
 {
-	return testEntries[index];
+	return mTestEntries[index];
 }
 
 int TestModel::getNumTests(TestStatus testStatus) const
 {
 	return
-		std::count_if(testEntries.begin(),
-						testEntries.end(),
+	    std::count_if(mTestEntries.begin(),
+	                    mTestEntries.end(),
 						[testStatus](const TestEntry& testEntry){
 							return testEntry.getStatus() == testStatus;
 						});
@@ -37,6 +37,6 @@ int TestModel::getNumTests(TestStatus testStatus) const
 void TestModel::merge(std::shared_ptr<TestModel> theirs)
 {
 	for(int i = 0; i < theirs->getNumTests(); ++i){
-		testEntries.push_back(theirs->getTest(i));
+		mTestEntries.push_back(theirs->getTest(i));
 	}
 }

@@ -28,10 +28,10 @@ public:
 	void setLineNumber(int value);
 
 private:
-	QString name;
-	QString family;
-	QString dump;
-	TestStatus status;
-	QString outputFilePath;
-	int lineNumber;
+	QString mName;
+	QString mFamily;
+	QString mDump;
+	TestStatus mStatus;
+	QString mOutputFilePath;
+	int mLineNumber;
 };

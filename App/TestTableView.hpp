@@ -16,6 +16,4 @@ public:
 
 protected:
 	void keyPressEvent(QKeyEvent *event) override;
-
-	TestTableModel* testTableModel;
 };

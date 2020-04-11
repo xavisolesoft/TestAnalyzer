@@ -20,6 +20,6 @@ public:
 	void merge(std::shared_ptr<TestModel> theirs);
 
 private:
-	std::vector<TestEntry> testEntries;
+	std::vector<TestEntry> mTestEntries;
 };
 
