@@ -40,13 +40,15 @@ QMenu *MainWindow::createFileMenu()
 
 							ui->testTableView->setTestModel(allTestModels);
 
-							ui->runTestsLabel->setText(QString("Run: %1")
+							ui->runTestsLabel->setText(tr("Run: %1")
 													   .arg(allTestModels->getNumTests()));
-							ui->okTestsLabel->setText(QString("OK: %1")
+							ui->okTestsLabel->setText(tr("OK: %1")
 													   .arg(allTestModels->getNumTests(TestStatus::SUCCEED)));
-							ui->failedTestsLabel->setText(QString("FAILED: %1")
+							ui->failedTestsLabel->setText(tr("FAILED: %1")
 													   .arg(allTestModels->getNumTests(TestStatus::FALIED)));
-							ui->crashedTestsLabel->setText(QString("CRASHED: %1")
+							ui->timeoutTestsLabel->setText(tr("TIMEOUT: %1")
+														   .arg(allTestModels->getNumTests(TestStatus::TIMEOUT)));
+							ui->crashedTestsLabel->setText(tr("CRASHED: %1")
 													   .arg(allTestModels->getNumTests(TestStatus::CRASHED)));
 						},
 						QKeySequence("Ctrl+I"));

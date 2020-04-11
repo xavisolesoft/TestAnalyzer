@@ -15,7 +15,8 @@ private:
 		UNDEFINED,
 		RUN,
 		OK,
-		FAILED
+		FAILED,
+		TIMEOUT
 	};
 
 public:

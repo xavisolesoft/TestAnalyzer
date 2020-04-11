@@ -28,7 +28,6 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 		if(auto RUN = "[ RUN      ]"; line.startsWith(RUN))
 		{
 			if(lastTag == GTestTag::RUN){
-				//TODO: Analize CRASHED and  TIMEOUT diferentiation for the future.
 				lastTestEntry->setStatus(TestStatus::CRASHED);
 			}
 
@@ -60,6 +59,15 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 			if(lastTestEntry){
 				lastTestEntry->setStatus(TestStatus::FALIED);
 				lastTag = GTestTag::FAILED;
+			} else {
+				//TODO: Report bad parsing.
+			}
+		}
+		else if(line.startsWith("[  TIMEOUT ]"))
+		{
+			if(lastTestEntry){
+				lastTestEntry->setStatus(TestStatus::TIMEOUT);
+				lastTag = GTestTag::TIMEOUT;
 			} else {
 				//TODO: Report bad parsing.
 			}

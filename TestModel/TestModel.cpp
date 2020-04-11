@@ -16,7 +16,7 @@ TestEntry& TestModel::addTestEntry()
 
 int TestModel::getNumTests() const
 {
-	return testEntries.size();
+	return static_cast<int>(testEntries.size());
 }
 
 const TestEntry& TestModel::getTest(int index) const
