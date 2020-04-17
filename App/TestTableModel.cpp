@@ -22,20 +22,22 @@ int TestTableModel::columnCount(const QModelIndex& parent) const
 {
 	Q_UNUSED(parent)
 
-	return 4;
+	return 5;
 }
 
 QVariant TestTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	if(role == Qt::DisplayRole && orientation == Qt::Horizontal){
 		if(section == TEST_STATUS_SECTION){
-			return "Status";
+			return tr("Status");
 		} else if(section == TEST_FAMILY_SECTION){
-			return "Family";
+			return tr("Family");
 		} else if(section == TEST_NAME_SECTION) {
-			return "Name";
+			return tr("Name");
+		} else if(section == TEST_EXECUTION_TIME_SECTION) {
+			return tr("Execution Time (secs)");
 		} else if(section == OUTPUT_FILE_SECTION) {
-			return "Output File";
+			return tr("Output File");
 		}
 	}
 
@@ -55,6 +57,8 @@ QVariant TestTableModel::data(const QModelIndex &index, int role) const
 			return mTestModel->getTest(index.row()).getFamily();
 		} else if(index.column() == TEST_NAME_SECTION) {
 			return mTestModel->getTest(index.row()).getName();
+		} else if(index.column() == TEST_EXECUTION_TIME_SECTION) {
+			return mTestModel->getTest(index.row()).getExecutionTimeMiliSecs()/1000.0;
 		} else if(index.column() == OUTPUT_FILE_SECTION) {
 			return QFileInfo(mTestModel->getTest(index.row()).getOutputFilePath()).completeBaseName();
 		}

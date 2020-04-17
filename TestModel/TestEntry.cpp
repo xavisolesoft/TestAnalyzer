@@ -64,3 +64,13 @@ void TestEntry::setLineNumber(int value)
 {
     mLineNumber = value;
 }
+
+long long TestEntry::getExecutionTimeMiliSecs() const
+{
+	return executionTimeMiliSecs;
+}
+
+void TestEntry::setExecutionTimeMiliSecs(long long value)
+{
+	executionTimeMiliSecs = value;
+}

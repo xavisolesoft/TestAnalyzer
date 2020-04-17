@@ -49,15 +49,17 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 		else if(line.startsWith("[       OK ]"))
 		{
 			if(lastTestEntry){
+				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(line));
 				lastTestEntry->setStatus(TestStatus::SUCCEED);
 				lastTag = GTestTag::OK;
 			} else {
 				//TODO: Report bad parsing.
 			}
 		}
-		else if(line.startsWith("[  FAILED  ]"))
+		else if(line.startsWith("[  FAILED  ]") && lastTestEntry->getStatus() != TestStatus::FALIED)
 		{
 			if(lastTestEntry){
+				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(line));
 				lastTestEntry->setStatus(TestStatus::FALIED);
 				lastTag = GTestTag::FAILED;
 			} else {
@@ -67,6 +69,7 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 		else if(line.startsWith("[  TIMEOUT ]"))
 		{
 			if(lastTestEntry){
+				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(line));
 				lastTestEntry->setStatus(TestStatus::TIMEOUT);
 				lastTag = GTestTag::TIMEOUT;
 			} else {
@@ -81,4 +84,29 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 	}
 
 	return testModel;
+}
+
+long long GTestParser::extractExecutionTimeMiliSecs(const QString &line)
+{
+	QStringList openSplit = line.split("(");
+	if(openSplit.size() != 2){
+		//TODO: Report bad parsing.
+		return -1;
+	}
+
+	QStringList closeSplit = openSplit[1].split(")");
+	if(closeSplit.size() != 2){
+		//TODO: Report bad parsing.
+		return -1;
+	}
+
+	QString executionTimeStr = openSplit[1].remove(")").remove("ms").trimmed();
+	bool isNumber;
+	long long executionTime = executionTimeStr.toLongLong(&isNumber);
+	if(!isNumber){
+		//TODO: Report bad parsing.
+		return -1;
+	}
+
+	return executionTime;
 }

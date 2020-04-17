@@ -23,5 +23,8 @@ public:
 	GTestParser();
 
 	std::shared_ptr<TestModel> parseTestModel(QIODevice& gTestOutput) const;
+
+private:
+	static long long extractExecutionTimeMiliSecs(const QString& line);
 };
 

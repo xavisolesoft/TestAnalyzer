@@ -34,12 +34,17 @@ void TestTableView::setTestModel(std::shared_ptr<TestModel> testModel)
 	horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	sortByColumn(0, Qt::AscendingOrder);
 
+	initOpenGTestOutputOnFileNameClick(*testTableModel);
+}
+
+void TestTableView::initOpenGTestOutputOnFileNameClick(const TestTableModel& testTableModel)
+{
 	connect(this,
 			&QTableView::clicked,
-			[this, testTableModel](const QModelIndex& modelIndex){
+			[this, &testTableModel](const QModelIndex& modelIndex){
 				QModelIndex mappedIndex = static_cast<QSortFilterProxyModel*>(model())->mapToSource(modelIndex);
-				if(mappedIndex.column() == 3){
-					if(const TestEntry* testEntry = testTableModel->getRowTestEntry(mappedIndex.row()); testEntry){
+				if(mappedIndex.column() == TestTableModel::OUTPUT_FILE_SECTION){
+					if(const TestEntry* testEntry = testTableModel.getRowTestEntry(mappedIndex.row()); testEntry){
 						QSettings settings(QSettings::IniFormat, QSettings::UserScope, "TestRunner", "TestRunner");
 						QProcess process;
 						process.execute(QString("\"%1\" \"%2\" -n%3")
@@ -48,7 +53,7 @@ void TestTableView::setTestModel(std::shared_ptr<TestModel> testModel)
 										.arg(testEntry->getLine()));
 					}
 				}
-			});
+	});
 }
 
 void TestTableView::keyPressEvent(QKeyEvent *event)
