@@ -25,14 +25,15 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 	int lineNumber = 1;
 	while(!gTestOutput.atEnd()){
 		QString line = gTestOutput.readLine();
-		if(auto RUN = "[ RUN      ]"; line.startsWith(RUN))
+
+		if(QString runGtestLine = cleanedLine(line, RUN_HEADER); !runGtestLine.isEmpty())
 		{
 			if(lastTag == GTestTag::RUN){
 				lastTestEntry->setStatus(TestStatus::CRASHED);
 			}
 
 			lastTestEntry = &testModel->addTestEntry();
-			QStringList fullNameSplit = line.remove(RUN).trimmed().split('.');
+			QStringList fullNameSplit = runGtestLine.remove(RUN_HEADER).trimmed().split('.');
 			if(fullNameSplit.size() == 1){
 				lastTestEntry->setName(fullNameSplit[0]);
 			} else {
@@ -46,30 +47,32 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 			lastTestEntry->setStatus(TestStatus::RUNNING);
 			lastTag = GTestTag::RUN;
 		}
-		else if(line.startsWith("[       OK ]"))
+		else if(const QString okGtestLine = cleanedLine(line, OK_HEADER); !okGtestLine.isEmpty())
 		{
 			if(lastTestEntry){
-				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(line));
+				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(okGtestLine));
 				lastTestEntry->setStatus(TestStatus::SUCCEED);
 				lastTag = GTestTag::OK;
 			} else {
 				//TODO: Report bad parsing.
 			}
 		}
-		else if(line.startsWith("[  FAILED  ]") && lastTestEntry->getStatus() != TestStatus::FAILED)
+		else if(const QString failedGtestLine = cleanedLine(line, FAILED_HEADER);
+				!failedGtestLine.isEmpty()
+				&& lastTestEntry->getStatus() != TestStatus::FAILED)
 		{
 			if(lastTestEntry){
-				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(line));
+				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(failedGtestLine));
 				lastTestEntry->setStatus(TestStatus::FAILED);
 				lastTag = GTestTag::FAILED;
 			} else {
 				//TODO: Report bad parsing.
 			}
 		}
-		else if(line.startsWith("[  TIMEOUT ]"))
+		else if(const QString timeoutGtestLine = cleanedLine(line, TIMEOUT_HEADER); !timeoutGtestLine.isEmpty())
 		{
 			if(lastTestEntry){
-				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(line));
+				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(timeoutGtestLine));
 				lastTestEntry->setStatus(TestStatus::TIMEOUT);
 				lastTag = GTestTag::TIMEOUT;
 			} else {
@@ -84,6 +87,16 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 	}
 
 	return testModel;
+}
+
+QString GTestParser::cleanedLine(const QString &line, const QString& gtestTagString)
+{
+	int index = line.indexOf(gtestTagString);
+	if(index < 0){
+		return "";
+	}
+
+	return line.right(line.size() - index);
 }
 
 long long GTestParser::extractExecutionTimeMiliSecs(const QString &line)
