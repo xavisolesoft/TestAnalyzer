@@ -81,17 +81,17 @@ QString TestTableModel::TestStatusToString(TestStatus testStatus)
 	switch(testStatus)
 	{
 	case TestStatus::NOT_STARTED:
-		return "NOT_STARTED";
+		return tr("NOT_STARTED");
 	case TestStatus::RUNNING:
-		return "RUNNING";
+		return tr("RUNNING");
 	case TestStatus::SUCCEED:
-		return "SUCCEED";
+		return tr("SUCCEED");
 	case TestStatus::FAILED:
-		return "FAILED";
+		return tr("FAILED");
 	case TestStatus::CRASHED:
-		return "CRASHED";
+		return tr("CRASHED");
 	case TestStatus::TIMEOUT:
-		return "TIMEOUT";
+		return tr("TIMEOUT");
 	}
 
 	return "UNDEFINED";
