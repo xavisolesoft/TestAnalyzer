@@ -7,7 +7,7 @@ enum class TestStatus
 	NOT_STARTED,
 	RUNNING,
 	SUCCEED,
-	FALIED,
+	FAILED,
 	CRASHED,
 	TIMEOUT
 };

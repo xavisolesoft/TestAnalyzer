@@ -82,7 +82,7 @@ void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)
 	ui->okTestsLabel->setText(tr("OK: %1")
 							   .arg(testModel->getNumTests(TestStatus::SUCCEED)));
 	ui->failedTestsLabel->setText(tr("FAILED: %1")
-							   .arg(testModel->getNumTests(TestStatus::FALIED)));
+							   .arg(testModel->getNumTests(TestStatus::FAILED)));
 	ui->timeoutTestsLabel->setText(tr("TIMEOUT: %1")
 								   .arg(testModel->getNumTests(TestStatus::TIMEOUT)));
 	ui->crashedTestsLabel->setText(tr("CRASHED: %1")

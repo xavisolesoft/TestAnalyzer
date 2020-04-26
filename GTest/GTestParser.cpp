@@ -56,11 +56,11 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 				//TODO: Report bad parsing.
 			}
 		}
-		else if(line.startsWith("[  FAILED  ]") && lastTestEntry->getStatus() != TestStatus::FALIED)
+		else if(line.startsWith("[  FAILED  ]") && lastTestEntry->getStatus() != TestStatus::FAILED)
 		{
 			if(lastTestEntry){
 				lastTestEntry->setExecutionTimeMiliSecs(extractExecutionTimeMiliSecs(line));
-				lastTestEntry->setStatus(TestStatus::FALIED);
+				lastTestEntry->setStatus(TestStatus::FAILED);
 				lastTag = GTestTag::FAILED;
 			} else {
 				//TODO: Report bad parsing.

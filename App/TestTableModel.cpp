@@ -86,8 +86,8 @@ QString TestTableModel::TestStatusToString(TestStatus testStatus)
 		return "RUNNING";
 	case TestStatus::SUCCEED:
 		return "SUCCEED";
-	case TestStatus::FALIED:
-		return "FALIED";
+	case TestStatus::FAILED:
+		return "FAILED";
 	case TestStatus::CRASHED:
 		return "CRASHED";
 	case TestStatus::TIMEOUT:
