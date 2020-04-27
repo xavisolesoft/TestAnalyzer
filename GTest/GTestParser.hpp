@@ -25,6 +25,7 @@ public:
 	std::shared_ptr<TestModel> parseTestModel(QIODevice& gTestOutput) const;
 
 private:
+	static QString getTestFamilyAndNameFromRunLine(const QString& runLine);
 	static QString cleanedLine(const QString& line, const QString& gtestTagString);
 	static long long extractExecutionTimeMiliSecs(const QString& line);
 

@@ -33,7 +33,7 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 			}
 
 			lastTestEntry = &testModel->addTestEntry();
-			QStringList fullNameSplit = runGtestLine.remove(RUN_HEADER).trimmed().split('.');
+			QStringList fullNameSplit = getTestFamilyAndNameFromRunLine(line).split('.');
 			if(fullNameSplit.size() == 1){
 				lastTestEntry->setName(fullNameSplit[0]);
 			} else {
@@ -87,6 +87,22 @@ std::shared_ptr<TestModel> GTestParser::parseTestModel(QIODevice& gTestOutput) c
 	}
 
 	return testModel;
+}
+
+QString GTestParser::getTestFamilyAndNameFromRunLine(const QString &runGtestLine)
+{
+	QString cleanedLine = runGtestLine;
+	cleanedLine.remove(RUN_HEADER);
+
+	QStringList message_NameAndFamilySplit = cleanedLine.split("=");
+	QString nameAndFamily = message_NameAndFamilySplit.last();
+	nameAndFamily = nameAndFamily.trimmed();
+
+	if(nameAndFamily.isEmpty()){
+		//TODO: Report error test have no name and family
+	}
+
+	return nameAndFamily;
 }
 
 QString GTestParser::cleanedLine(const QString &line, const QString& gtestTagString)
