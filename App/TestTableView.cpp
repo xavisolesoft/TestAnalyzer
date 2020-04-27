@@ -47,10 +47,10 @@ void TestTableView::initOpenGTestOutputOnFileNameClick(const TestTableModel& tes
 					if(const TestEntry* testEntry = testTableModel.getRowTestEntry(mappedIndex.row()); testEntry){
 						QSettings settings(QSettings::IniFormat, QSettings::UserScope, "TestRunner", "TestRunner");
 						QProcess process;
-						process.execute(QString("\"%1\" \"%2\" -n%3")
-										.arg(settings.value("notepadpp/path", "notepad++.exe").toString())
-										.arg(testEntry->getOutputFilePath())
-										.arg(testEntry->getLine()));
+						process.startDetached(QString("\"%1\" \"%2\" -n%3")
+												.arg(settings.value("notepadpp/path", "notepad++.exe").toString())
+												.arg(testEntry->getOutputFilePath())
+												.arg(testEntry->getLine()));
 					}
 				}
 	});
