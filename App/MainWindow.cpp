@@ -87,6 +87,8 @@ void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)
 								   .arg(testModel->getNumTests(TestStatus::TIMEOUT)));
 	ui->crashedTestsLabel->setText(tr("CRASHED: %1")
 							   .arg(testModel->getNumTests(TestStatus::CRASHED)));
+
+	mTestModel = testModel;
 }
 
 void MainWindow::import()
@@ -101,7 +103,6 @@ void MainWindow::import()
 		}
 
 		allTestModels->merge(mTestModel);
-		mTestModel = allTestModels;
 		setTestModel(allTestModels);
 	}
 }
