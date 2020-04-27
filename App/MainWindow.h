@@ -26,6 +26,7 @@ private:
 
 	void initImportButton();
 	void initCleanButton();
+	void initNotPassingFilterButton();
 	void dragEnterEvent(QDragEnterEvent *event) override;
 	void dropEvent(QDropEvent* event) override;
 

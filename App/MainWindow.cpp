@@ -5,7 +5,9 @@
 #include <QFileInfo>
 #include <QMimeData>
 #include <QSettings>
+#include <QClipboard>
 #include <QFileDialog>
+#include <QApplication>
 
 #include "GTest/GTestParser.hpp"
 #include "TestModel/TestModel.hpp"
@@ -22,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	initImportButton();
 	initCleanButton();
+	initNotPassingFilterButton();
 
 	setAcceptDrops(true);
 }
@@ -74,6 +77,30 @@ void MainWindow::initCleanButton()
 			&QAbstractButton::clicked,
 			[this](){
 				setTestModel(std::make_shared<TestModel>());
+	});
+}
+
+void MainWindow::initNotPassingFilterButton()
+{
+	connect(ui->notPassingFilterButton,
+			&QAbstractButton::clicked,
+			[this](){
+				QString gtestFitler;
+				for(int i = 0; i < mTestModel->getNumTests(); ++i){
+					const TestEntry& testEntry = mTestModel->getTest(i);
+					if(testEntry.getStatus() == TestStatus::FAILED ||
+							testEntry.getStatus() == TestStatus::CRASHED ||
+							testEntry.getStatus() == TestStatus::TIMEOUT){
+						gtestFitler.append(testEntry.getFamily() + "." + testEntry.getName() + ":");
+					}
+				}
+
+				if(!gtestFitler.isEmpty()){
+					gtestFitler.chop(1);
+				}
+
+				QClipboard *clipboard = QApplication::clipboard();
+				clipboard->setText(gtestFitler);
 	});
 }
 
