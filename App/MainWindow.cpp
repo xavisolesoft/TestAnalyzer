@@ -2,6 +2,8 @@
 #include "ui_MainWindow.h"
 
 #include <QFile>
+#include <QFileInfo>
+#include <QMimeData>
 #include <QSettings>
 #include <QFileDialog>
 
@@ -20,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	initImportButton();
 	initCleanButton();
+
+	setAcceptDrops(true);
 }
 
 MainWindow::~MainWindow()
@@ -71,6 +75,39 @@ void MainWindow::initCleanButton()
 			[this](){
 				setTestModel(std::make_shared<TestModel>());
 	});
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+	if (const QMimeData* mimeData = event->mimeData(); mimeData){
+		bool areAcceptedFileTypes = true;
+		foreach(const QUrl& fileUrl, mimeData->urls()){
+			QString fileExtension = QFileInfo(fileUrl.toLocalFile()).completeSuffix();
+			if(fileExtension != "txt"){
+				areAcceptedFileTypes = false;
+				break;
+			}
+		}
+		if(areAcceptedFileTypes){
+			event->acceptProposedAction();
+		}
+	}
+
+}
+
+void MainWindow::dropEvent(QDropEvent* event)
+ {
+	if (const QMimeData* mimeData = event->mimeData(); mimeData){
+		auto allTestModels = std::make_shared<TestModel>();
+		foreach(const QUrl& fileUrl, mimeData->urls()){
+			QFile qTestOutputFile(fileUrl.toLocalFile());
+			GTestParser gTestParser;
+			auto testModel = gTestParser.parseTestModel(qTestOutputFile);
+			allTestModels->merge(testModel);
+		}
+		allTestModels->merge(mTestModel);
+		setTestModel(allTestModels);
+	}
 }
 
 void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)

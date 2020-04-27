@@ -1,7 +1,10 @@
 #pragma once
 
 #include <QMenu>
+#include <QDropEvent>
 #include <QMainWindow>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 
 class TestModel;
 
@@ -15,7 +18,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+	~MainWindow() override ;
 
 private:
 	QMenu* createFileMenu();
@@ -23,6 +26,8 @@ private:
 
 	void initImportButton();
 	void initCleanButton();
+	void dragEnterEvent(QDragEnterEvent *event) override;
+	void dropEvent(QDropEvent* event) override;
 
 	void setTestModel(std::shared_ptr<TestModel> testModel);
 
