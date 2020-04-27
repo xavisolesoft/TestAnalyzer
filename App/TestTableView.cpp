@@ -4,7 +4,6 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QHeaderView>
-#include <QSortFilterProxyModel>
 #include <QProcess>
 #include <QStringList>
 #include <QSettings>
@@ -15,6 +14,7 @@
 #include "TestModel/TestModel.hpp"
 #include "TestModel/TestEntry.hpp"
 #include "TestTableModel.hpp"
+#include "TestSortFilterProxyModel.hpp"
 
 TestTableView::TestTableView(QWidget* parent) :
 	QTableView(parent)
@@ -24,8 +24,10 @@ TestTableView::TestTableView(QWidget* parent) :
 
 void TestTableView::setTestModel(std::shared_ptr<TestModel> testModel)
 {
+	clearTableModels();
+
 	auto testTableModel = new TestTableModel(this, testModel);
-	auto sortFilterProxyModel = new QSortFilterProxyModel(this);
+	auto sortFilterProxyModel = new TestSortFilterProxyModel(this);
 	sortFilterProxyModel->setDynamicSortFilter(true);
 	sortFilterProxyModel->setSourceModel(testTableModel);
 
@@ -37,12 +39,19 @@ void TestTableView::setTestModel(std::shared_ptr<TestModel> testModel)
 	initOpenGTestOutputOnFileNameClick(*testTableModel);
 }
 
+void TestTableView::setTestStatusFilter(TestStatus::Enum testStatus)
+{
+	if(auto testSortFilterProxyModel = static_cast<TestSortFilterProxyModel*>(model()); testSortFilterProxyModel){
+		testSortFilterProxyModel->setTestStatusFilter(testStatus);
+	}
+}
+
 void TestTableView::initOpenGTestOutputOnFileNameClick(const TestTableModel& testTableModel)
 {
 	connect(this,
 			&QTableView::clicked,
 			[this, &testTableModel](const QModelIndex& modelIndex){
-				QModelIndex mappedIndex = static_cast<QSortFilterProxyModel*>(model())->mapToSource(modelIndex);
+				QModelIndex mappedIndex = static_cast<TestSortFilterProxyModel*>(model())->mapToSource(modelIndex);
 				if(mappedIndex.column() == TestTableModel::OUTPUT_FILE_SECTION){
 					if(const TestEntry* testEntry = testTableModel.getRowTestEntry(mappedIndex.row()); testEntry){
 						QSettings settings(QSettings::IniFormat, QSettings::UserScope, "TestRunner", "TestRunner");
@@ -80,5 +89,15 @@ void TestTableView::keyPressEvent(QKeyEvent *event)
 			}
 
 			QApplication::clipboard()->setText(text);
+	}
+}
+
+void TestTableView::clearTableModels()
+{
+	if(auto oldSortFilterProxyModel = static_cast<TestSortFilterProxyModel*>(model()); oldSortFilterProxyModel){
+		delete oldSortFilterProxyModel;
+		if(auto oldTestTableModel = oldSortFilterProxyModel->sourceModel(); oldTestTableModel){
+			delete oldTestTableModel;
+		}
 	}
 }

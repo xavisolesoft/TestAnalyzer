@@ -4,6 +4,7 @@
 
 #include "TestModel/TestModel.hpp"
 #include "TestModel/TestEntry.hpp"
+#include "TestModel/TestStatus.hpp"
 
 TestTableModel::TestTableModel(QObject *parent, std::shared_ptr<TestModel> testModel)
 	: QAbstractTableModel(parent),
@@ -52,7 +53,7 @@ QVariant TestTableModel::data(const QModelIndex &index, int role) const
 
 	if(role == Qt::DisplayRole){
 		if(index.column() == TEST_STATUS_SECTION){
-			return TestStatusToString(mTestModel->getTest(index.row()).getStatus());
+			return TestStatus::toString(mTestModel->getTest(index.row()).getStatus());
 		} else if(index.column() == TEST_FAMILY_SECTION){
 			return mTestModel->getTest(index.row()).getFamily();
 		} else if(index.column() == TEST_NAME_SECTION) {
@@ -74,25 +75,4 @@ const TestEntry* TestTableModel::getRowTestEntry(int row) const
 	}
 
 	return &mTestModel->getTest(row);
-}
-
-QString TestTableModel::TestStatusToString(TestStatus testStatus)
-{
-	switch(testStatus)
-	{
-	case TestStatus::NOT_STARTED:
-		return tr("NOT_STARTED");
-	case TestStatus::RUNNING:
-		return tr("RUNNING");
-	case TestStatus::SUCCEED:
-		return tr("SUCCEED");
-	case TestStatus::FAILED:
-		return tr("FAILED");
-	case TestStatus::CRASHED:
-		return tr("CRASHED");
-	case TestStatus::TIMEOUT:
-		return tr("TIMEOUT");
-	}
-
-	return "UNDEFINED";
 }

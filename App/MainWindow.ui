@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>860</width>
+    <height>633</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,64 +15,112 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="1">
-     <widget class="QLabel" name="okTestsLabel">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <widget class="QLabel" name="timeoutTestsLabel">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QLabel" name="failedTestsLabel">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="4">
-     <widget class="QLabel" name="crashedTestsLabel">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="testStatusFilterLabel">
+        <property name="text">
+         <string>Status Filter:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="testStatusFilterComboBox"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="runTestsLabel">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="5">
      <widget class="TestTableView" name="testTableView"/>
     </item>
-    <item row="2" column="4">
-     <widget class="QPushButton" name="cleanButton">
-      <property name="text">
-       <string>Clean</string>
-      </property>
-     </widget>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="runTestsLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="okTestsLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="failedTestsLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="timeoutTestsLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="crashedTestsLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="2" column="3">
-     <widget class="QPushButton" name="importButton">
-      <property name="text">
-       <string>Import</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="notPassingFilterButton">
-      <property name="text">
-       <string>Not Passing Tests GTestFilter to Clipboard</string>
-      </property>
-     </widget>
+    <item row="3" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="notPassingFilterButton">
+        <property name="text">
+         <string>Not Passing Tests GTestFilter to Clipboard</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="importButton">
+        <property name="text">
+         <string>Import</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cleanButton">
+        <property name="text">
+         <string>Clean</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -81,7 +129,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>860</width>
      <height>26</height>
     </rect>
    </property>

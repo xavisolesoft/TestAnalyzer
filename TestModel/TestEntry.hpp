@@ -18,8 +18,8 @@ public:
 	const QString& getDump() const;
 	void setDump(QString value);
 
-	TestStatus getStatus() const;
-	void setStatus(TestStatus value);
+	TestStatus::Enum getStatus() const;
+	void setStatus(TestStatus::Enum value);
 
 	const QString& getOutputFilePath() const;
 	void setOutputFilePath(QString value);
@@ -34,7 +34,7 @@ private:
 	QString mName;
 	QString mFamily;
 	QString mDump;
-	TestStatus mStatus = TestStatus::NOT_STARTED;
+	TestStatus::Enum mStatus = TestStatus::NOT_STARTED;
 	QString mOutputFilePath;
 	int mLineNumber = -1;
 	long long executionTimeMiliSecs = -1;

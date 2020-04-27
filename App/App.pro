@@ -8,6 +8,7 @@ include(../GTest/GTest.pri)
 include(../TestModel/TestModel.pri)
 
 SOURCES += \
+    TestSortFilterProxyModel.cpp \
     TestTableModel.cpp \
     TestTableView.cpp \
     main.cpp \
@@ -15,6 +16,7 @@ SOURCES += \
 
 HEADERS += \
     MainWindow.h \
+    TestSortFilterProxyModel.hpp \
     TestTableModel.hpp \
     TestTableView.hpp
 

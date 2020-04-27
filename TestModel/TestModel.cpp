@@ -24,7 +24,7 @@ const TestEntry& TestModel::getTest(int index) const
 	return mTestEntries[index];
 }
 
-int TestModel::getNumTests(TestStatus testStatus) const
+int TestModel::getNumTests(TestStatus::Enum testStatus) const
 {
 	return
 	    std::count_if(mTestEntries.begin(),

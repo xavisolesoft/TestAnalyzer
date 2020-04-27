@@ -4,8 +4,6 @@
 
 #include <memory>
 
-#include "TestModel/TestStatus.hpp"
-
 class TestModel;
 class TestEntry;
 
@@ -23,10 +21,6 @@ public:
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
 	const TestEntry* getRowTestEntry(int row) const;
-
-private:
-	//TODO: Move this function to TestStatus.hpp if finaly is not removed.
-	static QString TestStatusToString(TestStatus testStatus);
 
 public:
 	static constexpr int TEST_STATUS_SECTION = 0;

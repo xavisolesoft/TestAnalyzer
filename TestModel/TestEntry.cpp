@@ -35,12 +35,12 @@ void TestEntry::setDump(QString value)
 	mDump = std::move(value);
 }
 
-TestStatus TestEntry::getStatus() const
+TestStatus::Enum TestEntry::getStatus() const
 {
 	return mStatus;
 }
 
-void TestEntry::setStatus(TestStatus value)
+void TestEntry::setStatus(TestStatus::Enum value)
 {
 	mStatus = value;
 }

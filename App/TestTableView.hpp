@@ -4,6 +4,8 @@
 
 #include <memory>
 
+#include "TestModel/TestStatus.hpp"
+
 class TestModel;
 class TestTableModel;
 
@@ -14,7 +16,12 @@ public:
 
 	void setTestModel(std::shared_ptr<TestModel> testModel);
 
+	void setTestStatusFilter(TestStatus::Enum testStatus);
+
 protected:
 	void initOpenGTestOutputOnFileNameClick(const TestTableModel& testTableModel);
 	void keyPressEvent(QKeyEvent *event) override;
+
+private:
+	void clearTableModels();
 };

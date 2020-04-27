@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 	createFileMenu();
 	createSettingsMenu();
 
+	initTestStatusFilterCombobox();
 	initImportButton();
 	initCleanButton();
 	initNotPassingFilterButton();
@@ -60,6 +61,23 @@ QMenu *MainWindow::createSettingsMenu()
 							});
 
 	return settingsMenu;
+}
+
+void MainWindow::initTestStatusFilterCombobox()
+{
+	ui->testStatusFilterComboBox->addItem(tr("All"), TestStatus::UNDEFINED);
+	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::SUCCEED), TestStatus::SUCCEED);
+	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::FAILED), TestStatus::FAILED);
+	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::CRASHED), TestStatus::CRASHED);
+	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::TIMEOUT), TestStatus::TIMEOUT);
+
+	ui->testStatusFilterComboBox->setCurrentIndex(ui->testStatusFilterComboBox->findData(TestStatus::UNDEFINED));
+
+	connect(ui->testStatusFilterComboBox,
+			&QComboBox::currentTextChanged,
+			[this](){
+				ui->testTableView->setTestStatusFilter(ui->testStatusFilterComboBox->currentData().value<TestStatus::Enum>());
+	});
 }
 
 void MainWindow::initImportButton()
@@ -140,6 +158,7 @@ void MainWindow::dropEvent(QDropEvent* event)
 void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)
 {
 	ui->testTableView->setTestModel(testModel);
+	ui->testTableView->setTestStatusFilter(ui->testStatusFilterComboBox->currentData().value<TestStatus::Enum>());
 
 	ui->runTestsLabel->setText(tr("Run: %1")
 							   .arg(testModel->getNumTests()));

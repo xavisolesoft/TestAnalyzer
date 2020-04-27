@@ -15,7 +15,7 @@ public:
 	int getNumTests() const;
 	const TestEntry& getTest(int index) const;
 
-	int getNumTests(TestStatus testStatus) const;
+	int getNumTests(TestStatus::Enum testStatus) const;
 
 	void merge(std::shared_ptr<TestModel> theirs);
 
