@@ -17,14 +17,19 @@ public:
 	void setTestFamilyFilter(const QString& familyName);
 	const QString& getTestFamilyFilter() const;
 
+	void setTestFileFilter(const QString& familyName);
+	const QString& getTestFileFilter() const;
+
 protected:
 	bool filterAcceptsRow(int sourceRow, const QModelIndex &sourcePrent) const override;
 
 private:
 	bool filterAcceptsTestStatus(int sourceRow, const QModelIndex &sourceParent) const;
 	bool filterAcceptsTestFamily(int sourceRow, const QModelIndex &sourceParent) const;
+	bool filterAcceptsTestFile(int sourceRow, const QModelIndex &sourceParent) const;
 
 	TestStatus::Enum mTestStatusFilter = TestStatus::UNDEFINED;
 	QString mTestFamilyFilter;
+	QString mTestFileFilter;
 };
 

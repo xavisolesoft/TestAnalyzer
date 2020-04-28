@@ -30,12 +30,24 @@ const QString& TestSortFilterProxyModel::getTestFamilyFilter() const
 	return mTestFamilyFilter;
 }
 
+void TestSortFilterProxyModel::setTestFileFilter(const QString &fileName)
+{
+	mTestFileFilter = fileName;
+	invalidateFilter();
+}
+
+const QString &TestSortFilterProxyModel::getTestFileFilter() const
+{
+	return mTestFileFilter;
+}
+
 bool TestSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
 	bool ret = true;
 
 	ret &= filterAcceptsTestStatus(sourceRow, sourceParent);
 	ret &= filterAcceptsTestFamily(sourceRow, sourceParent);
+	ret &= filterAcceptsTestFile(sourceRow, sourceParent);
 
 	return ret;
 }
@@ -58,4 +70,14 @@ bool TestSortFilterProxyModel::filterAcceptsTestFamily(int sourceRow, const QMod
 	QString testFamilyName = sourceModel()->data(testFamilyIndex).toString();
 
 	return mTestFamilyFilter.isEmpty() || mTestFamilyFilter == testFamilyName;
+}
+
+bool TestSortFilterProxyModel::filterAcceptsTestFile(int sourceRow, const QModelIndex &sourceParent) const
+{
+	QModelIndex testFileIndex = sourceModel()->index(sourceRow,
+													   TestTableModel::OUTPUT_FILE_SECTION,
+													   sourceParent);
+	QString testFileName = sourceModel()->data(testFileIndex).toString();
+
+	return mTestFileFilter.isEmpty() || mTestFileFilter == testFileName;
 }

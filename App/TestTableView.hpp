@@ -18,6 +18,7 @@ public:
 
 	void setTestStatusFilter(TestStatus::Enum testStatus);
 	void setTestFamilyFilter(const QString& familyName);
+	void setTestFileFilter(const QString& fileName);
 
 protected:
 	void initOpenGTestOutputOnFileNameClick(const TestTableModel& testTableModel);

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
+    <width>941</width>
     <height>633</height>
    </rect>
   </property>
@@ -38,7 +38,24 @@
        <widget class="QComboBox" name="testFamilyFilterComboBox">
         <property name="minimumSize">
          <size>
-          <width>400</width>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="testFileFilterLabel">
+        <property name="text">
+         <string>Test File Filter:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="testFileFilterComboBox">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
           <height>0</height>
          </size>
         </property>
@@ -146,7 +163,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>860</width>
+     <width>941</width>
      <height>26</height>
     </rect>
    </property>

@@ -45,6 +45,17 @@ QSet<QString> TestModel::getTestFamilyNames() const
 	return familyNames;
 }
 
+QSet<QString> TestModel::getOutputFilePaths() const
+{
+	QSet<QString> fileNames;
+
+	foreach(const TestEntry& testEntry, mTestEntries){
+		fileNames.insert(testEntry.getOutputFilePath());
+	}
+
+	return fileNames;
+}
+
 void TestModel::merge(std::shared_ptr<TestModel> theirs)
 {
 	if(theirs){

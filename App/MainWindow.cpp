@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	initTestStatusFilterCombobox();
 	initTestFamilyFilterCombobox();
+	initTestFileFilterCombobox();
 	initImportButton();
 	initCleanButton();
 	initNotPassingFilterButton();
@@ -108,6 +109,36 @@ void MainWindow::initTestFamilyFilterCombobox()
 	} else{
 		ui->testFamilyFilterComboBox->setDisabled(true);
 		ui->testFamilyFilterLabel->setDisabled(true);
+	}
+}
+
+void MainWindow::initTestFileFilterCombobox()
+{
+	if(mTestModel){
+		ui->testFileFilterComboBox->setDisabled(false);
+		ui->testFileFilterLabel->setDisabled(false);
+		ui->testFileFilterComboBox->clear();
+
+		const QString ALL_TEXT = tr("All");
+		ui->testFileFilterComboBox->addItem(ALL_TEXT);
+		foreach(const QString& testFileName, mTestModel->getOutputFilePaths()){
+			ui->testFileFilterComboBox->addItem(QFileInfo(testFileName).baseName());
+		}
+
+		ui->testFileFilterComboBox->setCurrentText(ALL_TEXT);
+
+		connect(ui->testFileFilterComboBox,
+				&QComboBox::currentTextChanged,
+				[this](const QString& currentText){
+					QString testFileFilter = currentText;
+					if(currentText == "All"){
+						testFileFilter = "";
+					}
+					ui->testTableView->setTestFileFilter(testFileFilter);
+		});
+	} else{
+		ui->testFileFilterComboBox->setDisabled(true);
+		ui->testFileFilterLabel->setDisabled(true);
 	}
 }
 
@@ -204,6 +235,7 @@ void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)
 
 	mTestModel = testModel;
 	initTestFamilyFilterCombobox();
+	initTestFileFilterCombobox();
 }
 
 void MainWindow::import()

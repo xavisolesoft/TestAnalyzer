@@ -26,6 +26,7 @@ private:
 
 	void initTestStatusFilterCombobox();
 	void initTestFamilyFilterCombobox();
+	void initTestFileFilterCombobox();
 	void initImportButton();
 	void initCleanButton();
 	void initNotPassingFilterButton();

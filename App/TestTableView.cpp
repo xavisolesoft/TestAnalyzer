@@ -53,6 +53,13 @@ void TestTableView::setTestFamilyFilter(const QString& familyName)
 	}
 }
 
+void TestTableView::setTestFileFilter(const QString &fileName)
+{
+	if(auto testSortFilterProxyModel = static_cast<TestSortFilterProxyModel*>(model()); testSortFilterProxyModel){
+		testSortFilterProxyModel->setTestFileFilter(fileName);
+	}
+}
+
 void TestTableView::initOpenGTestOutputOnFileNameClick(const TestTableModel& testTableModel)
 {
 	connect(this,

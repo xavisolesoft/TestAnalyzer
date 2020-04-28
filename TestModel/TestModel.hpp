@@ -21,6 +21,7 @@ public:
 	int getNumTests(TestStatus::Enum testStatus) const;
 
 	QSet<QString> getTestFamilyNames() const;
+	QSet<QString> getOutputFilePaths() const;
 
 	void merge(std::shared_ptr<TestModel> theirs);
 
