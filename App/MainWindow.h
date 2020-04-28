@@ -25,6 +25,7 @@ private:
 	QMenu* createSettingsMenu();
 
 	void initTestStatusFilterCombobox();
+	void initTestFamilyFilterCombobox();
 	void initImportButton();
 	void initCleanButton();
 	void initNotPassingFilterButton();

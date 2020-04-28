@@ -17,6 +17,7 @@ public:
 	void setTestModel(std::shared_ptr<TestModel> testModel);
 
 	void setTestStatusFilter(TestStatus::Enum testStatus);
+	void setTestFamilyFilter(const QString& familyName);
 
 protected:
 	void initOpenGTestOutputOnFileNameClick(const TestTableModel& testTableModel);

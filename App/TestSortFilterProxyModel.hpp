@@ -14,10 +14,17 @@ public:
 	void setTestStatusFilter(TestStatus::Enum value);
 	TestStatus::Enum getTestStatusFilter() const;
 
+	void setTestFamilyFilter(const QString& familyName);
+	const QString& getTestFamilyFilter() const;
+
 protected:
 	bool filterAcceptsRow(int sourceRow, const QModelIndex &sourcePrent) const override;
 
 private:
-	TestStatus::Enum testStatusFilter = TestStatus::UNDEFINED;
+	bool filterAcceptsTestStatus(int sourceRow, const QModelIndex &sourceParent) const;
+	bool filterAcceptsTestFamily(int sourceRow, const QModelIndex &sourceParent) const;
+
+	TestStatus::Enum mTestStatusFilter = TestStatus::UNDEFINED;
+	QString mTestFamilyFilter;
 };
 

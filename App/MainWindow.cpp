@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
 	createSettingsMenu();
 
 	initTestStatusFilterCombobox();
+	initTestFamilyFilterCombobox();
 	initImportButton();
 	initCleanButton();
 	initNotPassingFilterButton();
@@ -78,6 +79,36 @@ void MainWindow::initTestStatusFilterCombobox()
 			[this](){
 				ui->testTableView->setTestStatusFilter(ui->testStatusFilterComboBox->currentData().value<TestStatus::Enum>());
 	});
+}
+
+void MainWindow::initTestFamilyFilterCombobox()
+{
+	if(mTestModel){
+		ui->testFamilyFilterComboBox->setDisabled(false);
+		ui->testFamilyFilterLabel->setDisabled(false);
+		ui->testFamilyFilterComboBox->clear();
+
+		const QString ALL_TEXT = tr("All");
+		ui->testFamilyFilterComboBox->addItem(ALL_TEXT);
+		foreach(const QString& testFamilyName, mTestModel->getTestFamilyNames()){
+			ui->testFamilyFilterComboBox->addItem(testFamilyName);
+		}
+
+		ui->testFamilyFilterComboBox->setCurrentText(ALL_TEXT);
+
+		connect(ui->testFamilyFilterComboBox,
+				&QComboBox::currentTextChanged,
+				[this](const QString& currentText){
+					QString testFamilyFilter = currentText;
+					if(currentText == "All"){
+						testFamilyFilter = "";
+					}
+					ui->testTableView->setTestFamilyFilter(testFamilyFilter);
+		});
+	} else{
+		ui->testFamilyFilterComboBox->setDisabled(true);
+		ui->testFamilyFilterLabel->setDisabled(true);
+	}
 }
 
 void MainWindow::initImportButton()
@@ -172,6 +203,7 @@ void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)
 							   .arg(testModel->getNumTests(TestStatus::CRASHED)));
 
 	mTestModel = testModel;
+	initTestFamilyFilterCombobox();
 }
 
 void MainWindow::import()

@@ -10,29 +10,52 @@ TestSortFilterProxyModel::TestSortFilterProxyModel(QObject* parent)
 
 void TestSortFilterProxyModel::setTestStatusFilter(TestStatus::Enum value)
 {
-	testStatusFilter = value;
+	mTestStatusFilter = value;
 	invalidateFilter();
 }
 
 TestStatus::Enum TestSortFilterProxyModel::getTestStatusFilter() const
 {
-	return testStatusFilter;
+	return mTestStatusFilter;
+}
+
+void TestSortFilterProxyModel::setTestFamilyFilter(const QString &familyName)
+{
+	mTestFamilyFilter = familyName;
+	invalidateFilter();
+}
+
+const QString& TestSortFilterProxyModel::getTestFamilyFilter() const
+{
+	return mTestFamilyFilter;
 }
 
 bool TestSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+	bool ret = true;
+
+	ret &= filterAcceptsTestStatus(sourceRow, sourceParent);
+	ret &= filterAcceptsTestFamily(sourceRow, sourceParent);
+
+	return ret;
+}
+
+bool TestSortFilterProxyModel::filterAcceptsTestStatus(int sourceRow, const QModelIndex &sourceParent) const
 {
 	QModelIndex testStatusIndex = sourceModel()->index(sourceRow,
 													   TestTableModel::TEST_STATUS_SECTION,
 													   sourceParent);
 	TestStatus::Enum testStatus = TestStatus::fromString(sourceModel()->data(testStatusIndex).toString());
 
-	if(testStatusFilter == TestStatus::UNDEFINED){
-		return true;
-	}
+	return mTestStatusFilter == TestStatus::UNDEFINED || mTestStatusFilter == testStatus;
+}
 
-	if(testStatusFilter == testStatus){
-		return true;
-	}
+bool TestSortFilterProxyModel::filterAcceptsTestFamily(int sourceRow, const QModelIndex &sourceParent) const
+{
+	QModelIndex testFamilyIndex = sourceModel()->index(sourceRow,
+													   TestTableModel::TEST_FAMILY_SECTION,
+													   sourceParent);
+	QString testFamilyName = sourceModel()->data(testFamilyIndex).toString();
 
-	return false;
+	return mTestFamilyFilter.isEmpty() || mTestFamilyFilter == testFamilyName;
 }

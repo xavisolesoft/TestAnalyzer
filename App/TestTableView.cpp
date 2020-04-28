@@ -46,6 +46,13 @@ void TestTableView::setTestStatusFilter(TestStatus::Enum testStatus)
 	}
 }
 
+void TestTableView::setTestFamilyFilter(const QString& familyName)
+{
+	if(auto testSortFilterProxyModel = static_cast<TestSortFilterProxyModel*>(model()); testSortFilterProxyModel){
+		testSortFilterProxyModel->setTestFamilyFilter(familyName);
+	}
+}
+
 void TestTableView::initOpenGTestOutputOnFileNameClick(const TestTableModel& testTableModel)
 {
 	connect(this,
@@ -95,9 +102,9 @@ void TestTableView::keyPressEvent(QKeyEvent *event)
 void TestTableView::clearTableModels()
 {
 	if(auto oldSortFilterProxyModel = static_cast<TestSortFilterProxyModel*>(model()); oldSortFilterProxyModel){
-		delete oldSortFilterProxyModel;
 		if(auto oldTestTableModel = oldSortFilterProxyModel->sourceModel(); oldTestTableModel){
 			delete oldTestTableModel;
 		}
+		delete oldSortFilterProxyModel;
 	}
 }

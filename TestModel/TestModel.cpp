@@ -31,7 +31,18 @@ int TestModel::getNumTests(TestStatus::Enum testStatus) const
 	                    mTestEntries.end(),
 						[testStatus](const TestEntry& testEntry){
 							return testEntry.getStatus() == testStatus;
-						});
+	});
+}
+
+QSet<QString> TestModel::getTestFamilyNames() const
+{
+	QSet<QString> familyNames;
+
+	foreach(const TestEntry& testEntry, mTestEntries){
+		familyNames.insert(testEntry.getFamily());
+	}
+
+	return familyNames;
 }
 
 void TestModel::merge(std::shared_ptr<TestModel> theirs)
