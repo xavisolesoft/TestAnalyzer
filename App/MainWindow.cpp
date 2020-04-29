@@ -9,6 +9,8 @@
 #include <QFileDialog>
 #include <QApplication>
 
+#include <algorithm>
+
 #include "GTest/GTestParser.hpp"
 #include "TestModel/TestModel.hpp"
 
@@ -90,7 +92,7 @@ void MainWindow::initTestFamilyFilterCombobox()
 		ui->testFamilyFilterComboBox->clear();
 
 		ui->testFamilyFilterComboBox->addItem(tr(ALL_TEXT));
-		foreach(const QString& testFamilyName, mTestModel->getTestFamilyNames()){
+		foreach(const QString& testFamilyName, toOrderedList(mTestModel->getTestFamilyNames())){
 			ui->testFamilyFilterComboBox->addItem(testFamilyName);
 		}
 
@@ -119,7 +121,7 @@ void MainWindow::initTestFileFilterCombobox()
 		ui->testFileFilterComboBox->clear();
 
 		ui->testFileFilterComboBox->addItem(tr(ALL_TEXT));
-		foreach(const QString& testFileName, mTestModel->getOutputFilePaths()){
+		foreach(const QString& testFileName, toOrderedList(mTestModel->getOutputFilePaths())){
 			ui->testFileFilterComboBox->addItem(QFileInfo(testFileName).baseName());
 		}
 
@@ -269,4 +271,11 @@ void MainWindow::import()
 		allTestModels->merge(mTestModel);
 		setTestModel(allTestModels);
 	}
+}
+
+QList<QString> MainWindow::toOrderedList(const QSet<QString>& set)
+{
+	QList<QString> list = set.toList();
+	std::sort(list.begin(), list.end());
+	return list;
 }

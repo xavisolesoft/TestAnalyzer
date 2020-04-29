@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QList>
 #include <QMenu>
 #include <QObject>
 #include <QDropEvent>
@@ -42,6 +43,9 @@ private:
 	void setTestModel(std::shared_ptr<TestModel> testModel);
 
 	void import();
+
+	//TODO: Move this function in a common place.
+	static QList<QString> toOrderedList(const QSet<QString>& set);
 
     Ui::MainWindow *ui;
 	std::shared_ptr<TestModel> mTestModel;
