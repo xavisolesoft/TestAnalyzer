@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QSet>
 #include <QSortFilterProxyModel>
 
 #include "TestModel/TestStatus.hpp"
@@ -11,8 +12,8 @@ class TestSortFilterProxyModel :
 public:
 	TestSortFilterProxyModel(QObject* parent = nullptr);
 
-	void setTestStatusFilter(TestStatus::Enum value);
-	TestStatus::Enum getTestStatusFilter() const;
+	void setTestStatusFilter(QSet<TestStatus::Enum> values);
+	const QSet<TestStatus::Enum>& getTestStatusFilter() const;
 
 	void setTestFamilyFilter(const QString& familyName);
 	const QString& getTestFamilyFilter() const;
@@ -28,7 +29,7 @@ private:
 	bool filterAcceptsTestFamily(int sourceRow, const QModelIndex &sourceParent) const;
 	bool filterAcceptsTestFile(int sourceRow, const QModelIndex &sourceParent) const;
 
-	TestStatus::Enum mTestStatusFilter = TestStatus::UNDEFINED;
+	QSet<TestStatus::Enum> mTestStatusFilters;
 	QString mTestFamilyFilter;
 	QString mTestFileFilter;
 };

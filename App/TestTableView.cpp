@@ -39,10 +39,10 @@ void TestTableView::setTestModel(std::shared_ptr<TestModel> testModel)
 	initOpenGTestOutputOnFileNameClick(*testTableModel);
 }
 
-void TestTableView::setTestStatusFilter(TestStatus::Enum testStatus)
+void TestTableView::setTestStatusFilter(QSet<TestStatus::Enum> testStatus)
 {
 	if(auto testSortFilterProxyModel = static_cast<TestSortFilterProxyModel*>(model()); testSortFilterProxyModel){
-		testSortFilterProxyModel->setTestStatusFilter(testStatus);
+		testSortFilterProxyModel->setTestStatusFilter(std::move(testStatus));
 	}
 }
 

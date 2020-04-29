@@ -11,7 +11,6 @@
 
 #include "GTest/GTestParser.hpp"
 #include "TestModel/TestModel.hpp"
-#include "TestModel/TestStatus.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -67,18 +66,19 @@ QMenu *MainWindow::createSettingsMenu()
 
 void MainWindow::initTestStatusFilterCombobox()
 {
-	ui->testStatusFilterComboBox->addItem(tr("All"), TestStatus::UNDEFINED);
+	ui->testStatusFilterComboBox->addItem(tr(ALL_TEXT));
+	ui->testStatusFilterComboBox->addItem(tr(NOT_PASSING_TEXT));
 	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::SUCCEED), TestStatus::SUCCEED);
 	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::FAILED), TestStatus::FAILED);
 	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::CRASHED), TestStatus::CRASHED);
 	ui->testStatusFilterComboBox->addItem(TestStatus::toString(TestStatus::TIMEOUT), TestStatus::TIMEOUT);
 
-	ui->testStatusFilterComboBox->setCurrentIndex(ui->testStatusFilterComboBox->findData(TestStatus::UNDEFINED));
+	ui->testStatusFilterComboBox->setCurrentText(tr(ALL_TEXT));
 
 	connect(ui->testStatusFilterComboBox,
 			&QComboBox::currentTextChanged,
 			[this](){
-				ui->testTableView->setTestStatusFilter(ui->testStatusFilterComboBox->currentData().value<TestStatus::Enum>());
+				ui->testTableView->setTestStatusFilter(getTestStatusFilter());
 	});
 }
 
@@ -89,13 +89,12 @@ void MainWindow::initTestFamilyFilterCombobox()
 		ui->testFamilyFilterLabel->setDisabled(false);
 		ui->testFamilyFilterComboBox->clear();
 
-		const QString ALL_TEXT = tr("All");
-		ui->testFamilyFilterComboBox->addItem(ALL_TEXT);
+		ui->testFamilyFilterComboBox->addItem(tr(ALL_TEXT));
 		foreach(const QString& testFamilyName, mTestModel->getTestFamilyNames()){
 			ui->testFamilyFilterComboBox->addItem(testFamilyName);
 		}
 
-		ui->testFamilyFilterComboBox->setCurrentText(ALL_TEXT);
+		ui->testFamilyFilterComboBox->setCurrentText(tr(ALL_TEXT));
 
 		connect(ui->testFamilyFilterComboBox,
 				&QComboBox::currentTextChanged,
@@ -119,13 +118,12 @@ void MainWindow::initTestFileFilterCombobox()
 		ui->testFileFilterLabel->setDisabled(false);
 		ui->testFileFilterComboBox->clear();
 
-		const QString ALL_TEXT = tr("All");
-		ui->testFileFilterComboBox->addItem(ALL_TEXT);
+		ui->testFileFilterComboBox->addItem(tr(ALL_TEXT));
 		foreach(const QString& testFileName, mTestModel->getOutputFilePaths()){
 			ui->testFileFilterComboBox->addItem(QFileInfo(testFileName).baseName());
 		}
 
-		ui->testFileFilterComboBox->setCurrentText(ALL_TEXT);
+		ui->testFileFilterComboBox->setCurrentText(tr(ALL_TEXT));
 
 		connect(ui->testFileFilterComboBox,
 				&QComboBox::currentTextChanged,
@@ -184,6 +182,25 @@ void MainWindow::initNotPassingFilterButton()
 	});
 }
 
+QSet<TestStatus::Enum> MainWindow::getTestStatusFilter() const
+{
+	QSet<TestStatus::Enum> testStatuses;
+	const QString currentText = ui->testStatusFilterComboBox->currentText();
+
+	if(currentText == tr(NOT_PASSING_TEXT)){
+		testStatuses.insert(TestStatus::UNDEFINED);
+		testStatuses.insert(TestStatus::NOT_STARTED);
+		testStatuses.insert(TestStatus::RUNNING);
+		testStatuses.insert(TestStatus::FAILED);
+		testStatuses.insert(TestStatus::CRASHED);
+		testStatuses.insert(TestStatus::TIMEOUT);
+	} else if(currentText != tr(ALL_TEXT)){
+		testStatuses.insert(ui->testStatusFilterComboBox->currentData().value<TestStatus::Enum>());
+	}
+
+	return testStatuses;
+}
+
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
 	if (const QMimeData* mimeData = event->mimeData(); mimeData){
@@ -220,7 +237,7 @@ void MainWindow::dropEvent(QDropEvent* event)
 void MainWindow::setTestModel(std::shared_ptr<TestModel> testModel)
 {
 	ui->testTableView->setTestModel(testModel);
-	ui->testTableView->setTestStatusFilter(ui->testStatusFilterComboBox->currentData().value<TestStatus::Enum>());
+	ui->testTableView->setTestStatusFilter(getTestStatusFilter());
 
 	ui->runTestsLabel->setText(tr("Run: %1")
 							   .arg(testModel->getNumTests()));

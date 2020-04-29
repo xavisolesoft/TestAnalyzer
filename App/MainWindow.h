@@ -1,10 +1,13 @@
 #pragma once
 
 #include <QMenu>
+#include <QObject>
 #include <QDropEvent>
 #include <QMainWindow>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+
+#include "TestModel/TestStatus.hpp"
 
 class TestModel;
 
@@ -31,6 +34,8 @@ private:
 	void initCleanButton();
 	void initNotPassingFilterButton();
 
+	QSet<TestStatus::Enum> getTestStatusFilter() const;
+
 	void dragEnterEvent(QDragEnterEvent *event) override;
 	void dropEvent(QDropEvent* event) override;
 
@@ -40,4 +45,7 @@ private:
 
     Ui::MainWindow *ui;
 	std::shared_ptr<TestModel> mTestModel;
+
+	static constexpr auto ALL_TEXT = "All";
+	static constexpr auto NOT_PASSING_TEXT = "Not Passing";
 };

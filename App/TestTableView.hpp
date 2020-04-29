@@ -16,7 +16,7 @@ public:
 
 	void setTestModel(std::shared_ptr<TestModel> testModel);
 
-	void setTestStatusFilter(TestStatus::Enum testStatus);
+	void setTestStatusFilter(QSet<TestStatus::Enum> testStatus);
 	void setTestFamilyFilter(const QString& familyName);
 	void setTestFileFilter(const QString& fileName);
 

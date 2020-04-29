@@ -8,15 +8,15 @@ TestSortFilterProxyModel::TestSortFilterProxyModel(QObject* parent)
 
 }
 
-void TestSortFilterProxyModel::setTestStatusFilter(TestStatus::Enum value)
+void TestSortFilterProxyModel::setTestStatusFilter(QSet<TestStatus::Enum> values)
 {
-	mTestStatusFilter = value;
+	mTestStatusFilters = std::move(values);
 	invalidateFilter();
 }
 
-TestStatus::Enum TestSortFilterProxyModel::getTestStatusFilter() const
+const QSet<TestStatus::Enum>& TestSortFilterProxyModel::getTestStatusFilter() const
 {
-	return mTestStatusFilter;
+	return mTestStatusFilters;
 }
 
 void TestSortFilterProxyModel::setTestFamilyFilter(const QString &familyName)
@@ -59,7 +59,7 @@ bool TestSortFilterProxyModel::filterAcceptsTestStatus(int sourceRow, const QMod
 													   sourceParent);
 	TestStatus::Enum testStatus = TestStatus::fromString(sourceModel()->data(testStatusIndex).toString());
 
-	return mTestStatusFilter == TestStatus::UNDEFINED || mTestStatusFilter == testStatus;
+	return mTestStatusFilters.empty() || mTestStatusFilters.contains(testStatus);
 }
 
 bool TestSortFilterProxyModel::filterAcceptsTestFamily(int sourceRow, const QModelIndex &sourceParent) const
