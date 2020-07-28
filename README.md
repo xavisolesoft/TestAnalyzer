@@ -6,7 +6,7 @@ Receives GTest console output files as input and provides a comfortable graphica
 
 ## Snapshots
 
-![Snapshot](documentation\Snapshot.png)
+![Snapshot](documentation/Snapshot.png)
 
 ## Dependencies
 
